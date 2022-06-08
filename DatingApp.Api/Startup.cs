@@ -33,6 +33,15 @@ namespace DatingApp.Api
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // cors policy for allowing cross-origin requests
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+                });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -54,6 +63,8 @@ namespace DatingApp.Api
 
             app.UseRouting();
 
+            app.UseCors("CorsPolicy");
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
